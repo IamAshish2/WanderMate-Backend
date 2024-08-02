@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using secondProject.context;
+using secondProject.Dtos;
 using secondProject.Migrations;
 using secondProject.Models;
 
@@ -25,9 +27,17 @@ namespace secondProject.Controller
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Hotel hotel)
+        public IActionResult Create([FromBody] HotelDto hotelDto)
         {
-            _context.Hotels.Add(hotel);
+            var Hotel = new Hotel{
+                Name = hotelDto.Name,
+                Description = hotelDto.Description,
+                ImageUrl = hotelDto.ImageUrl,
+                Address = hotelDto.Address,
+                Price = hotelDto.Price                
+            };
+
+            _context.Hotels.Add(Hotel);
             _context.SaveChanges();
             return Ok("Hotel Created Successfully");
         }
@@ -67,8 +77,8 @@ namespace secondProject.Controller
             findHotel.Name = updateHotel.Name;
             findHotel.Description = updateHotel.Description;
             findHotel.ImageUrl = updateHotel.ImageUrl;
-            findHotel.price = updateHotel.price;
-            findHotel.address = updateHotel.address;
+            findHotel.Price = updateHotel.Price;
+            findHotel.Address = updateHotel.Address;
 
             _context.SaveChanges();
             return Ok("Hotel successfully updated.");

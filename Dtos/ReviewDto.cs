@@ -9,7 +9,7 @@ namespace secondProject.Dtos
     public class ReviewDto
     {
         public int? Rating{get; set;}
-        public string? ReviewText { get; set; }
+        public string? Comment { get; set; }
         public int? HotelId { get; set; }
     }
 }

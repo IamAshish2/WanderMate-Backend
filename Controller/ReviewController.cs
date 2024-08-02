@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using secondProject.context;
+using secondProject.Dtos;
 using secondProject.Models;
 
 namespace secondProject.Controller
@@ -23,8 +24,14 @@ namespace secondProject.Controller
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Reviews Review) { 
-                _context.Reviews.Add(Review);
+        public IActionResult Create([FromBody] ReviewDto reviewDto) { 
+
+            var review = new Reviews{
+                Rating = reviewDto.Rating,
+                Comment = reviewDto.Comment,
+                HotelId = reviewDto.HotelId
+            };
+                _context.Reviews.Add(review);
             _context.SaveChanges();
             return Ok("Added review Successfull");
         }

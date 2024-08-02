@@ -14,8 +14,8 @@ namespace secondProject.Models
         public string Description { get; set; } = string.Empty;
 
         public string ImageUrl { get; set; } = string.Empty;
-        public string address { get; set; } = string.Empty;
-        public int? price{ get; set; } 
+        public string Address { get; set; } = string.Empty;
+        public int? Price{ get; set; } 
 
         public bool IsDeleted{get;set;} = false;
 

@@ -6,8 +6,8 @@ namespace secondProject.Models
     {
         [Key]
         public int Id { get; set; }
-        public int Rating { get; set; }
-        public string? comment { get; set; }
+        public int? Rating { get; set; }
+        public string? Comment { get; set; }
 
         // foreign key to hotel
         public int? HotelId { get; set; }
