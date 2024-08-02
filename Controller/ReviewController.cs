@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using secondProject.context;
 using secondProject.Dtos;
 using secondProject.Models;
@@ -18,33 +20,64 @@ namespace secondProject.Controller
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<IEnumerable<Hotel>>> Get()
         {
-            return Ok(_context.Reviews.ToList());
+            try
+            {
+                var review = await _context.Reviews.ToListAsync();
+                return Ok(review);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Internal Server Error Occured. {e.Message}");
+            }
+
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] ReviewDto reviewDto) { 
-
-            var review = new Reviews{
-                Rating = reviewDto.Rating,
-                Comment = reviewDto.Comment,
-                HotelId = reviewDto.HotelId
-            };
+        public async Task<ActionResult<IEnumerable<Reviews>>> Create([FromBody] ReviewDto reviewDto)
+        {
+            try
+            {
+                var review = new Reviews
+                {
+                    Rating = reviewDto.Rating,
+                    Comment = reviewDto.Comment,
+                    HotelId = reviewDto.HotelId
+                };
                 _context.Reviews.Add(review);
-            _context.SaveChanges();
-            return Ok("Added review Successfull");
+                await _context.SaveChangesAsync();
+                return Ok("Added review Successfull");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Internal server error: {e.Message}");
+            }
+
+
+
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id) {  
-            var findHotel = _context.Reviews.Find(id);
-            if (findHotel == null) { 
-                   return NotFound();
+        public async Task<ActionResult<IEnumerable<Reviews>>> Delete(int id)
+        {
+            try
+            {
+                var findHotel = await _context.Reviews.FindAsync(id);
+                if (findHotel == null)
+                {
+                    return NotFound();
+                }
+                _context.Reviews.Remove(findHotel);
+                await _context.SaveChangesAsync();
+                return Ok("Review Deleted Successfully");
             }
-            _context.Reviews.Remove(findHotel);
-            _context.SaveChanges();
-            return Ok("Review Deleted Successfully");
+            catch (Exception e)
+            {
+                return BadRequest($"Invalid argument: {e.Message}");
+
+            }
+
         }
 
     }

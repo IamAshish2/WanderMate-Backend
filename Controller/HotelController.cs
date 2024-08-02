@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using secondProject.context;
 using secondProject.Dtos;
 using secondProject.Migrations;
@@ -21,82 +22,127 @@ namespace secondProject.Controller
 
         //Get request to hotels 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<IEnumerable<Hotel>>> Get()
         {
-            return Ok(_context.Hotels.ToList());
+            try
+            {
+                var hotel = await _context.Hotels.ToListAsync();
+                return Ok(hotel);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(404, $"404 error occured. No Hotels found: {e.Message}");
+            }
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] HotelDto hotelDto)
+        public async Task<ActionResult<IEnumerable<Hotel>>> Create([FromBody] HotelDto hotelDto)
         {
-            var Hotel = new Hotel{
-                Name = hotelDto.Name,
-                Description = hotelDto.Description,
-                ImageUrl = hotelDto.ImageUrl,
-                Address = hotelDto.Address,
-                Price = hotelDto.Price                
-            };
+            try
+            {
 
-            _context.Hotels.Add(Hotel);
-            _context.SaveChanges();
-            return Ok("Hotel Created Successfully");
+                var Hotel = new Hotel
+                {
+                    Name = hotelDto.Name,
+                    Description = hotelDto.Description,
+                    ImageUrl = hotelDto.ImageUrl,
+                    Address = hotelDto.Address,
+                    Price = hotelDto.Price
+                };
+
+                _context.Hotels.Add(Hotel);
+                await _context.SaveChangesAsync();
+                return Ok("Hotel Created Successfully");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Internal server error: {e.Message}");
+            }
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public async Task<ActionResult<IEnumerable<Hotel>>> GetById(int id)
         {
-            var hotel = _context.Hotels.Find(id);
-            if (hotel == null)
+            try
             {
-                return NotFound();
+                var hotel = await _context.Hotels.FindAsync(id);
+                if (hotel == null)
+                {
+                    return NotFound();
+                }
+                return Ok(hotel);
             }
-            return Ok(hotel);
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Internal server error: {e.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<ActionResult<IEnumerable<Hotel>>> Delete(int id)
         {
-            var hotel = _context.Hotels.Find(id);
-            if (hotel == null)
+            try
             {
-                return NotFound();
+                var hotel = await _context.Hotels.FindAsync(id);
+                if (hotel == null)
+                {
+                    return NotFound();
+                }
+                _context.Hotels.Remove(hotel);
+                await _context.SaveChangesAsync();
+                return Ok("Deleted successfully");
             }
-            _context.Hotels.Remove(hotel);
-            _context.SaveChanges();
-            return Ok("Deleted successfully");
+            catch (Exception e)
+            {
+                return BadRequest($"Invalid argument: {e.Message}");
+            }
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateHotel(int id, Hotel updateHotel)
+        public async Task<ActionResult<IEnumerable<Hotel>>> UpdateHotel(int id, Hotel updateHotel)
         {
-            var findHotel = _context.Hotels.Find(id);
-            if(findHotel == null)
+            try
             {
-                return NotFound();
-            }
-            findHotel.Name = updateHotel.Name;
-            findHotel.Description = updateHotel.Description;
-            findHotel.ImageUrl = updateHotel.ImageUrl;
-            findHotel.Price = updateHotel.Price;
-            findHotel.Address = updateHotel.Address;
+                var findHotel = await _context.Hotels.FindAsync(id);
+                if (findHotel == null)
+                {
+                    return NotFound();
+                }
+                findHotel.Name = updateHotel.Name;
+                findHotel.Description = updateHotel.Description;
+                findHotel.ImageUrl = updateHotel.ImageUrl;
+                findHotel.Price = updateHotel.Price;
+                findHotel.Address = updateHotel.Address;
 
-            _context.SaveChanges();
-            return Ok("Hotel successfully updated.");
+                await _context.SaveChangesAsync();
+                return Ok("Hotel successfully updated.");
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Internal server error: {e.Message}");
+            }
         }
 
         [HttpGet("search")]
-        public IActionResult SearchByName([FromQuery] string name)
+        public async Task<ActionResult<IEnumerable<Hotel>>> SearchByName([FromQuery] string name)
         {
-            var hotels = _context.Hotels
-                .Where(h => h.Name.Contains(name))
-                .ToList();
-
-            if (!hotels.Any())
+            try
             {
-                return NotFound();
-            }
+                var hotels = await _context.Hotels
+               .Where(h => h.Name.Contains(name))
+               .ToListAsync();
 
-            return Ok(hotels);
+                if (!hotels.Any())
+                {
+                    return NotFound();
+                }
+
+                return Ok(hotels);
+            } catch(Exception e){
+                return StatusCode(500, $"Internal server error: {e.Message}");
+            }
         }
+
     }
 }
