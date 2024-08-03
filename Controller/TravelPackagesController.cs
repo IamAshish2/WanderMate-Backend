@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using secondProject.context;
+using secondProject.Dtos;
 using secondProject.Models;
 
 namespace secondProject.Controller
@@ -22,11 +23,18 @@ namespace secondProject.Controller
 
         [HttpGet]
         public IActionResult Get(){
+            
             return Ok(_context.TravelPackages.ToList());
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] TravelPackages travelPackages){
+        public IActionResult Create([FromBody] TravelPackagesDto travelPackagesDto){
+            var travelPackages = new TravelPackages{
+                Name = travelPackagesDto.Name,
+                ImageUrl = travelPackagesDto.ImageUrl,
+                Description = travelPackagesDto.Description
+            };
+
             _context.TravelPackages.Add(travelPackages);
             _context.SaveChanges();
             return Ok("Successfully added a new Travel Packages");

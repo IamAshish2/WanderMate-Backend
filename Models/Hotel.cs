@@ -21,6 +21,5 @@ namespace secondProject.Models
 
         public ICollection<Reviews>  Reviews { get; set; } = new List<Reviews>();
 
-      
     }
 }
