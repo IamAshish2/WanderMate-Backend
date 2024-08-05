@@ -2,7 +2,7 @@
 
 namespace secondProject.Models
 {
-    public class Reviews
+    public class Review
     {
         [Key]
         public int Id { get; set; }
@@ -11,9 +11,12 @@ namespace secondProject.Models
 
         // foreign key to hotel
         public int? HotelId { get; set; }
-        
-        // hotel navigation : A review belongs to one hotel
-        public Hotel? Hotel  { get; set; }
+
+        // hotel navigation : Many review belongs to one hotel
+        public Hotel? Hotel { get; set; }
+
+        public int? userId { get; set; }
+        public User? User { get; set; }
 
     }
 }

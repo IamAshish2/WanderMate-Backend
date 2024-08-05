@@ -35,11 +35,11 @@ namespace secondProject.Controller
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<Reviews>>> Create([FromBody] ReviewDto reviewDto)
+        public async Task<ActionResult<IEnumerable<Review>>> Create([FromBody] ReviewDto reviewDto)
         {
             try
             {
-                var review = new Reviews
+                var review = new Review
                 {
                     Rating = reviewDto.Rating,
                     Comment = reviewDto.Comment,
@@ -59,7 +59,7 @@ namespace secondProject.Controller
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<IEnumerable<Reviews>>> Delete(int id)
+        public async Task<ActionResult<IEnumerable<Review>>> Delete(int id)
         {
             try
             {
