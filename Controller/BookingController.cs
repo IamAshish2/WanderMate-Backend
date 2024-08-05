@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using secondProject.context;
+using secondProject.Models;
 
 namespace secondProject.Controller
 {
@@ -20,16 +22,16 @@ namespace secondProject.Controller
 
 
         [HttpGet]
-        public IActionResult GetBookings()
+        public async Task<ActionResult<IEnumerable<Booking>>> GetBookings()
         {
-            var bookings = _context.Bookings.ToList();
+            var bookings = await _context.Bookings.ToListAsync();
             return Ok(bookings);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetBookingById(int id)
+        public async Task<ActionResult<IEnumerable<Booking>>> GetBookingById(int id)
         {
-            var booking = _context.Bookings.FirstOrDefault(b => b.BookingId == id);
+            var booking = await _context.Bookings.FirstOrDefaultAsync(b => b.BookingId == id);
 
             if (booking == null)
             {
@@ -40,9 +42,9 @@ namespace secondProject.Controller
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteBooking(int id)
+        public async Task<ActionResult<IEnumerable<Booking>>> DeleteBooking(int id)
         {
-            var booking = _context.Bookings.Find(id);
+            var booking = await _context.Bookings.FindAsync(id);
             if (booking == null)
             {
                 return NotFound();
