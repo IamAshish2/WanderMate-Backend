@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\secondProject.csproj": {}
+    "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\secondProject.csproj": {}
   },
   "projects": {
-    "c:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\secondProject.csproj": {
+    "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\secondProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\secondProject.csproj",
+        "projectUniqueName": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\secondProject.csproj",
         "projectName": "secondProject",
-        "projectPath": "c:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\secondProject.csproj",
+        "projectPath": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\secondProject.csproj",
         "packagesPath": "C:\\Users\\ashish\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\obj\\",
+        "outputPath": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ashish\\AppData\\Roaming\\NuGet\\NuGet.Config",

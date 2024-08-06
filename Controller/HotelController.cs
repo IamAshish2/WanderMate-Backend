@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
+﻿using Azure.Messaging;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -35,29 +36,49 @@ namespace secondProject.Controller
             }
         }
 
+        //[HttpPost]
+        //public async Task<ActionResult<IEnumerable<Hotel>>> Create([FromBody] HotelDto hotelDto)
+        //{
+        //    try
+        //    {
+
+        //        var Hotel = new Hotel
+        //        {
+        //            Name = hotelDto.Name,
+        //            Description = hotelDto.Description,
+        //            ImageUrl = hotelDto.ImageUrl,
+        //            Address = hotelDto.Address,
+        //            Price = hotelDto.Price
+        //        };
+
+        //        _context.Hotels.Add(Hotel);
+        //        await _context.SaveChangesAsync();
+        //        return Ok("Hotel Created Successfully");
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return StatusCode(500, $"Internal server error: {e.Message}");
+        //    }
+        //}
+
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<Hotel>>> Create([FromBody] HotelDto hotelDto)
+        public async Task<ActionResult<IEnumerable<Hotel>>> Create([FromBody] Hotel hotel)
         {
             try
             {
-
-                var Hotel = new Hotel
+                if (hotel == null)
                 {
-                    Name = hotelDto.Name,
-                    Description = hotelDto.Description,
-                    ImageUrl = hotelDto.ImageUrl,
-                    Address = hotelDto.Address,
-                    Price = hotelDto.Price
-                };
-
-                _context.Hotels.Add(Hotel);
+                    return BadRequest("Hotel data is null");
+                }
+                await _context.Hotels.AddAsync(hotel);
                 await _context.SaveChangesAsync();
-                return Ok("Hotel Created Successfully");
+                return Ok(hotel);
             }
-            catch (Exception e)
-            {
-                return StatusCode(500, $"Internal server error: {e.Message}");
+            catch (Exception e) {
+                return BadRequest(e.Message);
             }
+
+           
         }
 
         [HttpGet("{id}")]
@@ -112,7 +133,9 @@ namespace secondProject.Controller
                 findHotel.Description = updateHotel.Description;
                 findHotel.ImageUrl = updateHotel.ImageUrl;
                 findHotel.Price = updateHotel.Price;
-                findHotel.Address = updateHotel.Address;
+                findHotel.FreeCancellation = updateHotel.FreeCancellation;
+                findHotel.ReserveNow = updateHotel.ReserveNow;
+               
 
                 await _context.SaveChangesAsync();
                 return Ok("Hotel successfully updated.");

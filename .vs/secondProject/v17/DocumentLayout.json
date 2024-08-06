@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Models\\TravelPackages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\TravelPackages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Models\\Hotel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\Hotel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Controller\\HotelController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controller\\HotelController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,41 +26,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Hotel.cs",
-              "DocumentMoniker": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Models\\Hotel.cs",
-              "RelativeDocumentMoniker": "Models\\Hotel.cs",
-              "ToolTip": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Models\\Hotel.cs",
-              "RelativeToolTip": "Models\\Hotel.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-02T02:19:08.196Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "TravelPackages.cs",
-              "DocumentMoniker": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Models\\TravelPackages.cs",
-              "RelativeDocumentMoniker": "Models\\TravelPackages.cs",
-              "ToolTip": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Models\\TravelPackages.cs",
-              "RelativeToolTip": "Models\\TravelPackages.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAABAAAA",
+              "Title": "HotelController.cs",
+              "DocumentMoniker": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Controller\\HotelController.cs",
+              "RelativeDocumentMoniker": "Controller\\HotelController.cs",
+              "ToolTip": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Controller\\HotelController.cs",
+              "RelativeToolTip": "Controller\\HotelController.cs",
+              "ViewState": "AQIAAHMAAAAAAAAAAAAowIAAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-02T02:18:40.451Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAVAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-01T15:25:25.756Z",
+              "WhenOpened": "2024-08-06T06:06:42.34Z",
               "EditorCaption": ""
             }
           ]

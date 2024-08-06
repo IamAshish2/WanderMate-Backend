@@ -13,6 +13,6 @@ namespace secondProject.Dtos
 
         public int? UserId { get; set; }
 
-        public int? HotelId { get; set; }
+       // public int? HotelId { get; set; }
     }
 }

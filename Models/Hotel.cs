@@ -6,21 +6,27 @@ namespace secondProject.Models
 {
     public class Hotel
     {
-        [Key]
+        [Key] 
         public int Id { get; set; }
 
         public string Name { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;
-
-        public string ImageUrl { get; set; } = string.Empty;
-        public string Address { get; set; } = string.Empty;
+        
         public int? Price { get; set; }
 
-        public bool IsDeleted { get; set; } = false;
+        public bool FreeCancellation { get; set; } = false;
 
-        public ICollection<Review> Reviews { get; set; } = new List<Review>();
-        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public bool ReserveNow { get; set; } = false;
+
+
+        public List<string> ImageUrl { get; set; } = new List<string>();
+        //public string Address { get; set; } = string.Empty
+
+        //public bool IsDeleted { get; set; } = false;
+
+        //public ICollection<Review> Reviews { get; set; } = new List<Review>();
+        //public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
     }
 }

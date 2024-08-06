@@ -34,29 +34,29 @@ namespace secondProject.Controller
 
         }
 
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<Review>>> Create([FromBody] ReviewDto reviewDto)
-        {
-            try
-            {
-                var review = new Review
-                {
-                    Rating = reviewDto.Rating,
-                    Comment = reviewDto.Comment,
-                    HotelId = reviewDto.HotelId
-                };
-                _context.Reviews.Add(review);
-                await _context.SaveChangesAsync();
-                return Ok("Added review Successfull");
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, $"Internal server error: {e.Message}");
-            }
+        //[HttpPost]
+        //public async Task<ActionResult<IEnumerable<Review>>> Create([FromBody] ReviewDto reviewDto)
+        //{
+        //    try
+        //    {
+        //        var review = new Review
+        //        {
+        //            Rating = reviewDto.Rating,
+        //            Comment = reviewDto.Comment,
+        //            HotelId = reviewDto.HotelId
+        //        };
+        //        _context.Reviews.Add(review);
+        //        await _context.SaveChangesAsync();
+        //        return Ok("Added review Successfull");
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return StatusCode(500, $"Internal server error: {e.Message}");
+        //    }
 
 
 
-        }
+        //}
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<IEnumerable<Review>>> Delete(int id)

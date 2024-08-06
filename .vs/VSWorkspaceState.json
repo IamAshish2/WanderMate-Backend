@@ -1,8 +1,11 @@
 {
   "ExpandedNodes": [
     "",
+    "\\context",
+    "\\Controller",
+    "\\Dtos",
     "\\Models"
   ],
-  "SelectedNode": "\\Models\\Hotel.cs",
+  "SelectedNode": "\\Controller\\HotelController.cs",
   "PreviewInSolutionExplorer": false
 }
