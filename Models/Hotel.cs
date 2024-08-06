@@ -19,7 +19,6 @@ namespace secondProject.Models
 
         public bool ReserveNow { get; set; } = false;
 
-
         public List<string> ImageUrl { get; set; } = new List<string>();
         //public string Address { get; set; } = string.Empty
 
