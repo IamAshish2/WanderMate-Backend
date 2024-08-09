@@ -1,8 +1,11 @@
 {
   "ExpandedNodes": [
     "",
+    "\\Controller",
+    "\\Dtos",
+    "\\Dtos\\ReviewDTOs",
     "\\Models"
   ],
-  "SelectedNode": "\\Models",
-  "PreviewInSolutionExplorer": false
+  "SelectedNode": "\\Models\\Review.cs",
+  "PreviewInSolutionExplorer": true
 }

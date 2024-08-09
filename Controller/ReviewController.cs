@@ -20,12 +20,19 @@ namespace secondProject.Controller
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> Get()
+        public async Task<ActionResult<IEnumerable<Review>>> Get()
         {
             try
             {
                 var review = await _context.Reviews.ToListAsync();
-                return Ok(review);
+                var reviewDto = review.Select(review => new GetReviewDTO
+                {
+                   Id = review.Id,
+                   Rating = review.Rating,
+                   Comment = review.Comment,
+
+                });
+                return Ok(reviewDto);
             }
             catch (Exception e)
             {
@@ -34,41 +41,39 @@ namespace secondProject.Controller
 
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult<IEnumerable<Review>>> Create([FromBody] ReviewDto reviewDto)
-        //{
-        //    try
-        //    {
-        //        var review = new Review
-        //        {
-        //            Rating = reviewDto.Rating,
-        //            Comment = reviewDto.Comment,
-        //            HotelId = reviewDto.HotelId
-        //        };
-        //        _context.Reviews.Add(review);
-        //        await _context.SaveChangesAsync();
-        //        return Ok("Added review Successfull");
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return StatusCode(500, $"Internal server error: {e.Message}");
-        //    }
-
-
-
-        //}
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<Review>>> Create([FromBody] ReviewDto reviewDto)
+        {
+            try
+            {
+                var review = new Review
+                {
+                    Rating = reviewDto.Rating,
+                    Comment = reviewDto.Comment,
+                    HotelId = reviewDto.HotelId,
+                    userId = reviewDto.UserId
+                };
+                _context.Reviews.Add(review);
+                await _context.SaveChangesAsync();
+                return Ok("Added review Successfull");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Internal server error: {e.Message}");
+            }
+        }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<IEnumerable<Review>>> Delete(int id)
         {
             try
             {
-                var findHotel = await _context.Reviews.FindAsync(id);
-                if (findHotel == null)
+                var findReview = await _context.Reviews.FindAsync(id);
+                if (findReview == null)
                 {
                     return NotFound();
                 }
-                _context.Reviews.Remove(findHotel);
+                _context.Reviews.Remove(findReview);
                 await _context.SaveChangesAsync();
                 return Ok("Review Deleted Successfully");
             }

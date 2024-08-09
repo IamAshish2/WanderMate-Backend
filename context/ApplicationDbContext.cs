@@ -36,7 +36,7 @@ namespace secondProject.context
             //modelBuilder.Entity<Booking>()
             //    .HasOne(b => b.Hotel)
             //    .WithMany(h => h.Bookings)
-            //    .HasForeignKey(b => b.HotelId);
+            //    .HasForeignKey(b => b.HotelId); 
 
             //modelBuilder.Entity<Review>()
             //    .HasOne(r => r.User)
