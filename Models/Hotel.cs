@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-using secondProject.Migrations;
+//using secondProject.Migrations;
 
 namespace secondProject.Models
 {

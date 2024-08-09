@@ -12,8 +12,8 @@ using secondProject.context;
 namespace secondProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240806033711_makeimagetolist")]
-    partial class makeimagetolist
+    [Migration("20240808084631_initialpush")]
+    partial class initialpush
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,20 +54,16 @@ namespace secondProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("FreeCancellation")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -75,6 +71,9 @@ namespace secondProject.Migrations
 
                     b.Property<int?>("Price")
                         .HasColumnType("int");
+
+                    b.Property<bool>("ReserveNow")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -116,11 +115,18 @@ namespace secondProject.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("FreeCancellation")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ReserveNow")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

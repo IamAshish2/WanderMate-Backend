@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using secondProject.Migrations;
+//using secondProject.Migrations;
 using secondProject.Models;
 
 namespace secondProject.context

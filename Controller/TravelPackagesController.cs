@@ -22,71 +22,119 @@ namespace secondProject.Controller
         }
 
         [HttpGet]
-        public IActionResult Get(){
-            
-            return Ok(_context.TravelPackages.ToList());
-        }
+        public async Task<ActionResult<IEnumerable<TravelPackages>>> Get(){
+            try
+            {
+                var travelPackages =await  _context.TravelPackages.ToListAsync();
+                return Ok(travelPackages);
+            }
+            catch (Exception ex) {
+                return BadRequest(ex.Message);
+            }
+    }
 
+        //[HttpPost]
+        //public async Task<ActionResult<TravelPackages>> Create([FromBody] TravelPackagesDto travelPackagesDto)
+        //{
+        //    try
+        //    {
+        //        var travelPackages = new TravelPackages
+        //        {
+        //            Name = travelPackagesDto.Name,
+        //            ImageUrl = travelPackagesDto.ImageUrl,
+        //            Description = travelPackagesDto.Description
+        //        };
+
+        //        _context.TravelPackages.Add(travelPackages);
+        //        await _context.SaveChangesAsync();
+        //        return Ok("Successfully created Travel package.");
+        //    }
+        //    catch (Exception e)
+        //     {
+        //            return BadRequest(e.Message);
+        //      }
+
+        //}
         [HttpPost]
-        public IActionResult Create([FromBody] TravelPackagesDto travelPackagesDto){
-            var travelPackages = new TravelPackages{
-                Name = travelPackagesDto.Name,
-                ImageUrl = travelPackagesDto.ImageUrl,
-                Description = travelPackagesDto.Description
-            };
-
-            _context.TravelPackages.Add(travelPackages);
-            _context.SaveChanges();
-            return Ok("Successfully added a new Travel Packages");
+        public  async Task<ActionResult<TravelPackages>> Create([FromBody] TravelPackages travelPackages)
+        {
+            try
+            {
+               if(travelPackages == null)
+                {
+                    return NotFound();
+                }
+                _context.TravelPackages.Add(travelPackages);
+                await _context.SaveChangesAsync();
+                return Ok("success.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Internal server error: {ex.Message}");
+            }
         }
 
-        [HttpDelete]
-        public IActionResult Delete(int id){
-            var findTravelPackage = _context.TravelPackages.Find(id);
-            if(findTravelPackage == null){
-                return NotFound();
-            }
-            _context.TravelPackages.Remove(findTravelPackage);
-            _context.SaveChanges();
-            return Ok("Successfully deleted the travel Package.");
-        }
 
-        [HttpGet("{id}")]
-        public IActionResult FindById(int id){
-            var travelPackage = _context.TravelPackages.Find(id);
-            if(travelPackage == null){
-                return NotFound();
+       [HttpDelete("{id}")]
+        public async Task<ActionResult<TravelPackages>> Delete(int id){
+            try
+            {
+                var findTravelPackage = await _context.TravelPackages.FindAsync(id);
+                if (findTravelPackage == null)
+                {
+                    return NotFound();
+                }
+                _context.TravelPackages.Remove(findTravelPackage);
+                await _context.SaveChangesAsync();
+                return Ok("Successfully deleted the travel Package.");
             }
-            return Ok(travelPackage);
+            catch (Exception ex) {
+                return BadRequest( $"Internal server error: {ex.Message}");
+            }
+           
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id,TravelPackages updatedTravelPackage){
-            var travelPackage = _context.TravelPackages.Find(id);
-            if(travelPackage == null){
-                return NotFound();
-            }
+        public async Task<ActionResult<TravelPackages>> Update(int id,TravelPackages updatedTravelPackage){
+            try
+            {
+                var travelPackage = await _context.TravelPackages.FindAsync(id);
+                if (travelPackage == null)
+                {
+                    return NotFound();
+                }
 
-            travelPackage.Id = updatedTravelPackage.Id;
-            travelPackage.Name = updatedTravelPackage.Name;
-            travelPackage.ImageUrl = updatedTravelPackage.ImageUrl;
-            travelPackage.Description = updatedTravelPackage.Description;
-            
-            _context.SaveChanges();
-            return Ok("Successfully updated Travel Package.");
+                //travelPackage.Id = updatedTravelPackage.Id;
+                travelPackage.Name = updatedTravelPackage.Name;
+                travelPackage.ImageUrl = updatedTravelPackage.ImageUrl;
+                travelPackage.Description = updatedTravelPackage.Description;
+
+               await  _context.SaveChangesAsync();
+                return Ok("Successfully updated Travel Package.");
+            }
+            catch (Exception ex) {
+                return StatusCode(500,$"Error: {ex.Message}");
+            }
+          
         }
 
         [HttpGet("search")]
-        public IActionResult Search([FromQuery] string name){
-            var travelPackages = _context.TravelPackages
-                                .Where(t => t.Name.Contains(name))
-                                .ToList();
-            if(!travelPackages.Any()){
-                return NotFound();
+        public  IActionResult Search([FromQuery] string name){
+            try
+            {
+                var travelPackages =   _context.TravelPackages
+                              .Where(t => t.Name.Contains(name));
+                              
+                if (!travelPackages.Any())
+                {
+                    return NotFound();
+                }
+
+                return Ok(travelPackages);
             }
-
-            return Ok(travelPackages);
-
+            catch (Exception ex) {
+                return BadRequest($"Error: {ex.Message}");
+            }
         }
 
     }

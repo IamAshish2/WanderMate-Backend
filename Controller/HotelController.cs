@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using secondProject.context;
 using secondProject.Dtos;
-using secondProject.Migrations;
+//using secondProject.Migrations;
 using secondProject.Models;
 
 namespace secondProject.Controller
@@ -154,7 +154,7 @@ namespace secondProject.Controller
             {
                 var hotels = await _context.Hotels
                .Where(h => h.Name.Contains(name))
-               .ToListAsync();
+                .ToListAsync();
 
                 if (!hotels.Any())
                 {

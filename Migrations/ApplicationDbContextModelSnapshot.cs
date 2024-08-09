@@ -112,11 +112,18 @@ namespace secondProject.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("FreeCancellation")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ReserveNow")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
