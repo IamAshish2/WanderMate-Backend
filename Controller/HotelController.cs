@@ -1,12 +1,9 @@
-﻿using Azure.Messaging;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using secondProject.context;
 using secondProject.Dtos;
-//using secondProject.Migrations;
+using secondProject.Dtos.HotelDTOs;
 using secondProject.Models;
 
 namespace secondProject.Controller
@@ -23,12 +20,23 @@ namespace secondProject.Controller
 
         //Get request to hotels 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> Get()
+        public async Task<ActionResult<IEnumerable<Hotel>>> Get() // ienumerable
         {
             try
             {
                 var hotel = await _context.Hotels.ToListAsync();
-                return Ok(hotel);
+                var hotelDtos = hotel.Select(hotel => new GetHotelDTO
+                {
+                    Id = hotel.Id,
+                    Name = hotel.Name,
+                    Price = hotel.Price,
+                    Description = hotel.Description,
+                    ImageUrl = hotel.ImageUrl,
+                    FreeCancellation = hotel.FreeCancellation,
+                    ReserveNow = hotel.ReserveNow,
+                });
+
+                return Ok(hotelDtos);
             }
             catch (Exception e)
             {
@@ -36,50 +44,50 @@ namespace secondProject.Controller
             }
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult<IEnumerable<Hotel>>> Create([FromBody] HotelDto hotelDto)
-        //{
-        //    try
-        //    {
-
-        //        var Hotel = new Hotel
-        //        {
-        //            Name = hotelDto.Name,
-        //            Description = hotelDto.Description,
-        //            ImageUrl = hotelDto.ImageUrl,
-        //            Address = hotelDto.Address,
-        //            Price = hotelDto.Price
-        //        };
-
-        //        _context.Hotels.Add(Hotel);
-        //        await _context.SaveChangesAsync();
-        //        return Ok("Hotel Created Successfully");
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return StatusCode(500, $"Internal server error: {e.Message}");
-        //    }
-        //}
-
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<Hotel>>> Create([FromBody] Hotel hotel)
+        public async Task<ActionResult<IEnumerable<Hotel>>> Create([FromBody] HotelDto hotelDto)
         {
             try
             {
-                if (hotel == null)
-                {
-                    return BadRequest("Hotel data is null");
-                }
-                await _context.Hotels.AddAsync(hotel);
-                await _context.SaveChangesAsync();
-                return Ok(hotel);
-            }
-            catch (Exception e) {
-                return BadRequest(e.Message);
-            }
 
-           
+                var Hotel = new Hotel
+                {
+                    Name = hotelDto.Name,
+                    Description = hotelDto.Description,
+                    ImageUrl = hotelDto.ImageUrl,
+                    Price = hotelDto.Price,
+                    FreeCancellation = hotelDto.FreeCancellation,
+                    ReserveNow = hotelDto.ReserveNow
+                };
+
+                _context.Hotels.Add(Hotel);
+                await _context.SaveChangesAsync();
+                return Ok("Hotel Created Successfully");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Internal server error: {e.Message}");
+            }
         }
+
+        // [HttpPost]
+        // public async Task<ActionResult<IEnumerable<Hotel>>> Create([FromBody] Hotel hotel)
+        // {
+        //     try
+        //     {
+        //         if (hotel == null)
+        //         {
+        //             return BadRequest("Hotel data is null");
+        //         }
+        //         await _context.Hotels.AddAsync(hotel);
+        //         await _context.SaveChangesAsync();
+        //         return Ok(hotel);
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         return BadRequest(e.Message);
+        //     }
+        // }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Hotel>>> GetById(int id)
@@ -87,11 +95,21 @@ namespace secondProject.Controller
             try
             {
                 var hotel = await _context.Hotels.FindAsync(id);
+                var hotelFromDto = new HotelDto
+                {
+                    Name = hotel.Name,
+                    Description = hotel.Description,
+                    ImageUrl = hotel.ImageUrl,
+                    Price = hotel.Price,
+                    FreeCancellation = hotel.FreeCancellation,
+                    ReserveNow = hotel.ReserveNow
+                };
+
                 if (hotel == null)
                 {
                     return NotFound();
                 }
-                return Ok(hotel);
+                return Ok(hotelFromDto);
             }
             catch (Exception e)
             {
@@ -120,7 +138,7 @@ namespace secondProject.Controller
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<IEnumerable<Hotel>>> UpdateHotel(int id, Hotel updateHotel)
+        public async Task<ActionResult<IEnumerable<Hotel>>> UpdateHotel(int id, HotelDto updateHotel)
         {
             try
             {
@@ -135,7 +153,7 @@ namespace secondProject.Controller
                 findHotel.Price = updateHotel.Price;
                 findHotel.FreeCancellation = updateHotel.FreeCancellation;
                 findHotel.ReserveNow = updateHotel.ReserveNow;
-               
+
 
                 await _context.SaveChangesAsync();
                 return Ok("Hotel successfully updated.");
@@ -162,7 +180,9 @@ namespace secondProject.Controller
                 }
 
                 return Ok(hotels);
-            } catch(Exception e){
+            }
+            catch (Exception e)
+            {
                 return StatusCode(500, $"Internal server error: {e.Message}");
             }
         }
