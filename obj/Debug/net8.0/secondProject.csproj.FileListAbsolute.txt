@@ -136,3 +136,5 @@ C:\Users\ashish\Desktop\webapi-backend\secondProject\secondProject\bin\Debug\net
 C:\Users\ashish\Desktop\webapi-backend\secondProject\secondProject\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\ashish\Desktop\webapi-backend\secondProject\secondProject\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 c:\Users\ashish\Desktop\webapi-backend\secondProject\secondProject\obj\Debug\net8.0\secondProject.sourcelink.json
+C:\Users\ashish\Desktop\webapi-backend\secondProject\secondProject\bin\Debug\net8.0\BCrypt.Net-Next.dll
+C:\Users\ashish\Desktop\webapi-backend\secondProject\secondProject\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

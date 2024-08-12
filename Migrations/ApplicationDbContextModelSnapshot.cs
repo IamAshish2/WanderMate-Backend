@@ -143,15 +143,13 @@ namespace secondProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<string>("ConformPassword")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -167,7 +165,7 @@ namespace secondProject.Migrations
             modelBuilder.Entity("secondProject.Models.Booking", b =>
                 {
                     b.HasOne("secondProject.Models.User", "User")
-                        .WithMany("Bookings")
+                        .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
@@ -195,8 +193,6 @@ namespace secondProject.Migrations
 
             modelBuilder.Entity("secondProject.Models.User", b =>
                 {
-                    b.Navigation("Bookings");
-
                     b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618

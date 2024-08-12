@@ -41,7 +41,8 @@ namespace secondProject.context
             //modelBuilder.Entity<Review>()
             //    .HasOne(r => r.User)
             //    .WithMany(u => u.Reviews)
-            //    .HasForeignKey(r => r.userId);
+            //    .HasForeignKey(r => r.userId)
+            //    .OnDelete(DeleteBehavior.Cascade);
 
             //modelBuilder.Entity<Review>()
             //.HasOne(r => r.Hotel)
