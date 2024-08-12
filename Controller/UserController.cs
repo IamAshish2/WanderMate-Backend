@@ -70,13 +70,14 @@ namespace secondProject.Controller
 
             if (user.Password != user.ConformPassword) return BadRequest("Passwords do not match.");
 
+            // Use BCrypt.Net.BCrypt.HashPassword to generate secure salt and hash
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
             var newUser = new User
             {
                 UserName = user.UserName,
                 Email = user.Email,
-                Password = hashedPassword, 
+                Password = hashedPassword,  // Store the complete hashed password (incorporates salt)
             };
 
             await _context.Users.AddAsync(newUser);

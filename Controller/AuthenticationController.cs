@@ -1,6 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using secondProject.context;
 using secondProject.Dtos.UserDTOs;
@@ -18,19 +16,31 @@ namespace secondProject.Controller
             _context = context;
         }
 
-
         [HttpPost("Login")]
-        public async Task<IActionResult> LoginUser([FromBody] LoginDto login)
+        public async Task<IActionResult> UserLogin([FromBody] LoginDto loginDto)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == login.UserName);
-            if (user == null) return BadRequest("The username does not exist.");
+            try
+            {
+                var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == loginDto.UserName);
 
-            bool isPassValid = BCrypt.Net.BCrypt.Verify(login.Password, user.Password);
-            if (!isPassValid) return BadRequest("The password does not match.");
+                if (user == null)
+                {
+                    return BadRequest("Username does not exist.");
+                }
 
-            return Ok("Login Successful.");
+                // Verify password using BCrypt.Net.BCrypt.Verify:
+                bool isPasswordValid = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password);
+                if (!isPasswordValid)
+                {
+                    return BadRequest("Password is incorrect.");
+                }
+
+                return Ok("User signed in successfully!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
-
-
     }
 }
