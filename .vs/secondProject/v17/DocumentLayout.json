@@ -3,28 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C29261F9-6F83-4440-9643-D8CF4D4CB75A}|secondProject.csproj|c:\\users\\ashish\\desktop\\webapi-backend\\secondproject\\secondproject\\controller\\authenticationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C29261F9-6F83-4440-9643-D8CF4D4CB75A}|secondProject.csproj|solutionrelative:controller\\authenticationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C29261F9-6F83-4440-9643-D8CF4D4CB75A}|secondProject.csproj|c:\\users\\ashish\\desktop\\webapi-backend\\secondproject\\secondproject\\dtos\\userdtos\\logindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C29261F9-6F83-4440-9643-D8CF4D4CB75A}|secondProject.csproj|solutionrelative:dtos\\userdtos\\logindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C29261F9-6F83-4440-9643-D8CF4D4CB75A}|secondProject.csproj|c:\\users\\ashish\\desktop\\webapi-backend\\secondproject\\secondproject\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{C29261F9-6F83-4440-9643-D8CF4D4CB75A}|secondProject.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C29261F9-6F83-4440-9643-D8CF4D4CB75A}|secondProject.csproj|c:\\users\\ashish\\desktop\\webapi-backend\\secondproject\\secondproject\\controller\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C29261F9-6F83-4440-9643-D8CF4D4CB75A}|secondProject.csproj|solutionrelative:controller\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C29261F9-6F83-4440-9643-D8CF4D4CB75A}|secondProject.csproj|c:\\users\\ashish\\desktop\\webapi-backend\\secondproject\\secondproject\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C29261F9-6F83-4440-9643-D8CF4D4CB75A}|secondProject.csproj|solutionrelative:models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C29261F9-6F83-4440-9643-D8CF4D4CB75A}|secondProject.csproj|c:\\users\\ashish\\desktop\\webapi-backend\\secondproject\\secondproject\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C29261F9-6F83-4440-9643-D8CF4D4CB75A}|secondProject.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C29261F9-6F83-4440-9643-D8CF4D4CB75A}|secondProject.csproj|c:\\users\\ashish\\desktop\\webapi-backend\\secondproject\\secondproject\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{C29261F9-6F83-4440-9643-D8CF4D4CB75A}|secondProject.csproj|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,75 +30,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "LoginDto.cs",
-              "DocumentMoniker": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Dtos\\UserDTOs\\LoginDto.cs",
-              "RelativeDocumentMoniker": "Dtos\\UserDTOs\\LoginDto.cs",
-              "ToolTip": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Dtos\\UserDTOs\\LoginDto.cs",
-              "RelativeToolTip": "Dtos\\UserDTOs\\LoginDto.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAsAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-12T06:40:33.104Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "User.cs",
-              "DocumentMoniker": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Models\\User.cs",
-              "RelativeDocumentMoniker": "Models\\User.cs",
-              "ToolTip": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Models\\User.cs",
-              "RelativeToolTip": "Models\\User.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-12T06:40:53.041Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAC0AAAAKAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-12T06:26:35.115Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Controller\\UserController.cs",
-              "RelativeDocumentMoniker": "Controller\\UserController.cs",
-              "ToolTip": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Controller\\UserController.cs",
-              "RelativeToolTip": "Controller\\UserController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAADsAAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-12T06:26:27.409Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\appsettings.json",
-              "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\appsettings.json",
-              "RelativeToolTip": "appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAADyAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-08-12T06:23:29.791Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AuthenticationController.cs",
-              "DocumentMoniker": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Controller\\AuthenticationController.cs",
-              "RelativeDocumentMoniker": "Controller\\AuthenticationController.cs",
-              "ToolTip": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\Controller\\AuthenticationController.cs",
-              "RelativeToolTip": "Controller\\AuthenticationController.cs",
-              "ViewState": "AQIAABAAAAAAAAAAAAAQwBUAAAAbAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-12T03:54:29.425Z",
+              "Title": ".gitignore",
+              "DocumentMoniker": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\.gitignore",
+              "RelativeDocumentMoniker": ".gitignore",
+              "ToolTip": "C:\\Users\\ashish\\Desktop\\webapi-backend\\secondProject\\secondProject\\.gitignore",
+              "RelativeToolTip": ".gitignore",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-08-13T05:41:48.16Z",
               "EditorCaption": ""
             }
           ]
