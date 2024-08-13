@@ -27,6 +27,7 @@ namespace secondProject.Controller
                 {
                     Id = u.Id,  
                     UserName = u.UserName,
+                    Role = u.Role,
                     Email = u.Email,    
                     Password = u.Password
                 });
@@ -48,10 +49,11 @@ namespace secondProject.Controller
                 return NotFound();
             }
 
-            var userDto =  new GetUserDto
+            var userDto = new GetUserDto
             {
                 Id = user.Id,
                 UserName = user.UserName,
+                Role = user.Role,   
                 Email = user.Email,
                 Password = user.Password
             };
@@ -77,6 +79,7 @@ namespace secondProject.Controller
             {
                 UserName = user.UserName,
                 Email = user.Email,
+                Role = user.Role,
                 Password = hashedPassword,  // Store the complete hashed password (incorporates salt)
             };
 

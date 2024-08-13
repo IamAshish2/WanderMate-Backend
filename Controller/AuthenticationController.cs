@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using secondProject.context;
 using secondProject.Dtos.UserDTOs;
+using secondProject.Service;
 
 namespace secondProject.Controller
 {
@@ -10,13 +12,16 @@ namespace secondProject.Controller
     public class AuthenticationController:ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly TokenService _tokenService;
 
-        public AuthenticationController(ApplicationDbContext context)
+        public AuthenticationController(ApplicationDbContext context,TokenService tokenService)
         {
             _context = context;
+            _tokenService = tokenService;
         }
 
         [HttpPost("Login")]
+  
         public async Task<IActionResult> UserLogin([FromBody] LoginDto loginDto)
         {
             try
@@ -34,8 +39,17 @@ namespace secondProject.Controller
                 {
                     return BadRequest("Password is incorrect.");
                 }
+                //var token = _tokenService.GenerateToken(user);
+                //return Ok(token);
+                var token = _tokenService.GenerateToken(user,isPasswordValid);
 
-                return Ok("User signed in successfully!");
+                // Store the token and user data in the session
+                //HttpContext.Session.SetString("AuthToken", token);
+                //HttpContext.Session.SetString("UserName", user.Id.ToString());
+                //HttpContext.Session.SetString("UserName", user.UserName);
+                //HttpContext.Session.SetString("UserRole", user.Role);
+
+                return Ok(new { token });
             }
             catch (Exception ex)
             {

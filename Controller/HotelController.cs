@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using secondProject.context;
@@ -10,6 +11,7 @@ namespace secondProject.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles ="Admin")]
     public class HotelController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -19,6 +21,7 @@ namespace secondProject.Controller
         }
 
         //Get request to hotels 
+        [Authorize(Roles = "User")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Hotel>>> Get() // ienumerable
         {
