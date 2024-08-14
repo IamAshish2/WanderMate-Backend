@@ -103,5 +103,12 @@ namespace secondProject.Controller
             _context.SaveChanges();
             return Ok("Deleted Successfully.");
         }
+
+        [HttpPost("Logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return Ok(new { message = "Logged out successfully" });
+        }
     }
 }
