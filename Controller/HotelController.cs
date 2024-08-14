@@ -11,7 +11,7 @@ namespace secondProject.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles="Admin")]
     public class HotelController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -21,8 +21,9 @@ namespace secondProject.Controller
         }
 
         //Get request to hotels 
-        [Authorize(Roles = "User")]
+        
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<IEnumerable<Hotel>>> Get() // ienumerable
         {
             try
