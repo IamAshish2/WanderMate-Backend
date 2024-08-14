@@ -33,10 +33,11 @@ namespace secondProject.context
             //    .HasOne(b => b.User)
             //    .WithMany(u => u.Bookings)
             //    .HasForeignKey(b => b.UserId);
+
             //modelBuilder.Entity<Booking>()
             //    .HasOne(b => b.Hotel)
             //    .WithMany(h => h.Bookings)
-            //    .HasForeignKey(b => b.HotelId); 
+            //    .HasForeignKey(b => b.HotelId);
 
             //modelBuilder.Entity<Review>()
             //    .HasOne(r => r.User)
@@ -45,11 +46,35 @@ namespace secondProject.context
             //    .OnDelete(DeleteBehavior.Cascade);
 
             //modelBuilder.Entity<Review>()
-            //.HasOne(r => r.Hotel)
-            //.WithMany(h => h.Reviews)
-            //.HasForeignKey(r => r.HotelId);
+            //    .HasOne(r => r.Hotel)
+            //    .WithMany(h => h.Reviews)
+            //    .HasForeignKey(r => r.HotelId);
+
+            modelBuilder.Entity<Booking>()
+         .HasOne(b => b.User)
+         .WithMany(u => u.Bookings)
+         .HasForeignKey(b => b.UserId)
+         .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Booking>()
+            .HasOne(b => b.Hotel)
+            .WithMany(h => h.Bookings)
+            .HasForeignKey(b => b.HotelId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Review>()
+            .HasOne(r => r.User)
+            .WithMany(u => u.Reviews)
+            .HasForeignKey(r => r.userId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+
+            modelBuilder.Entity<Review>()
+            .HasOne(r => r.Hotel)
+            .WithMany(h => h.Reviews)
+            .HasForeignKey(r => r.HotelId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         }
-
     }
 }
