@@ -95,5 +95,12 @@ namespace secondProject.Controller
             }
         }
 
+        [Authorize]
+        [HttpGet("verify-token")]
+        public IActionResult VerifyToken()
+        {
+            return Ok("User Authorized");
+        }
+
     }
 }
