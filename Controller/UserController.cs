@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using secondProject.context;
+using secondProject.Dtos;
 using secondProject.Dtos.UserDTOs;
 using secondProject.Models;
+using secondProject.Service;
 
 namespace secondProject.Controller
 {
@@ -11,9 +13,13 @@ namespace secondProject.Controller
     public class UserController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public UserController(ApplicationDbContext context)
+        private readonly EmailService _emailService;
+        private readonly PasswordReset _passwordReset;
+
+        public UserController(ApplicationDbContext context,EmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -109,6 +115,53 @@ namespace secondProject.Controller
         {
             HttpContext.Session.Clear();
             return Ok(new { message = "Logged out successfully" });
+        }
+
+        [HttpPost("Forgot Password")]
+        public async Task<ActionResult> ForgotPassword([FromBody] ForgotPasswordDto model)    
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Email == model.Email);
+            if (user == null)  return NotFound();
+
+            // Simulate generating a password reset token (In reality, you'd generate a secure, unique token)
+            var resetToken = Guid.NewGuid().ToString();   // Generate a secure token
+
+            var emailBody = $"This is your Reset Token: {resetToken}";
+             await _emailService.SendEmailAsync(user.Email, "Password Reset", emailBody);
+
+
+            // // Store the reset token with the user's information in a secure way (e.g., in a database)
+            _context.PasswordResets.Add(new PasswordReset { Token = resetToken });
+            await _context.SaveChangesAsync();
+
+
+            return Ok("A password reset link has been sent.");
+
+        }
+
+
+        [HttpPost("Update password")]
+        public async Task<ActionResult> UpdatePassWord([FromBody] UpdatePasswordDto model)
+        {
+            var token = await _context.PasswordResets.Where(p => p.Token == model.Token).FirstOrDefaultAsync();
+            if (token == null) return NotFound();
+
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
+
+            var findUser = await _context.Users.Where(u => u.Email == model.Email).FirstOrDefaultAsync();
+            if(findUser == null) return NotFound();
+
+            // Update the user's password
+            findUser.Password = hashedPassword;
+
+            // Remove the used reset token or mark it as used
+            _context.PasswordResets.Remove(token);
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+
+            return Ok("Password updated successfully.");
+
         }
     }
 }
