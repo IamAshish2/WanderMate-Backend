@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using secondProject.context;
+using secondProject.Models;
 using secondProject.Service;
 using System.Text;
 
@@ -38,6 +39,10 @@ builder.Services.AddCors(options => {
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSingleton<TokenService>();
+
+
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
+builder.Services.AddSingleton<EmailService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
