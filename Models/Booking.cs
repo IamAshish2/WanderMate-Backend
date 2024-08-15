@@ -15,8 +15,8 @@ namespace secondProject.Models
         public User? User { get; set; }
 
         // hotel id foreign key
-        //public int? HotelId { get; set; }
-        //public Hotel? Hotel { get; set; }
+        public int? HotelId { get; set; }
+        public Hotel? Hotel { get; set; }
 
 
     }

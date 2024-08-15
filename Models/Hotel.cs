@@ -17,6 +17,6 @@ namespace secondProject.Models
 
         //public bool IsDeleted { get; set; } = false;
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
-        //public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
     }
 }
