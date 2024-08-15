@@ -17,6 +17,7 @@ namespace secondProject.context
         public DbSet<TravelPackages> TravelPackages { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<PasswordReset> PasswordResets { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
