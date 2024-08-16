@@ -11,7 +11,7 @@ namespace secondProject.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles="Admin")]
+    [Authorize]
     public class HotelController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

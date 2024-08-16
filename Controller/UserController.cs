@@ -76,7 +76,7 @@ namespace secondProject.Controller
             var userNameExists = await _context.Users.FirstOrDefaultAsync(u => u.UserName == user.UserName);
             if (userNameExists != null) return BadRequest("The userName already exists.");
 
-            if (user.Password != user.ConformPassword) return BadRequest("Passwords do not match.");
+            //if (user.Password != user.ConformPassword) return BadRequest("Passwords do not match.");
 
             // Use BCrypt.Net.BCrypt.HashPassword to generate secure salt and hash
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
@@ -91,7 +91,9 @@ namespace secondProject.Controller
 
             await _context.Users.AddAsync(newUser);
             await _context.SaveChangesAsync();
-            return Ok("User Created Successfully!");
+            //return Ok(new { Message = "User Created Successfully!" })
+            return Ok(new { Message = "User Created Successfully!" });
+
         }
 
 
@@ -144,12 +146,12 @@ namespace secondProject.Controller
         public async Task<ActionResult> UpdatePassWord([FromBody] UpdatePasswordDto model)
         {
             var token = await _context.PasswordResets.Where(p => p.Token == model.Token).FirstOrDefaultAsync();
-            if (token == null) return NotFound();
+            if (token == null) return BadRequest("The token did not match");
 
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
             var findUser = await _context.Users.Where(u => u.Email == model.Email).FirstOrDefaultAsync();
-            if(findUser == null) return NotFound();
+            if(findUser == null) return BadRequest("The email was not found!");
 
             // Update the user's password
             findUser.Password = hashedPassword;
