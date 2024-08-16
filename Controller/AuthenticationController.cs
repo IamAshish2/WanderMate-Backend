@@ -77,15 +77,23 @@ namespace secondProject.Controller
                 }
 
                 // Generate token
+
                 var token = _tokenService.GenerateToken(user);
 
-                // Store the token and user data in the session
-                HttpContext.Session.SetString("AuthToken", token);
-                HttpContext.Session.SetString("Id", user.Id.ToString());  // Storing UserId instead of UserName
-                HttpContext.Session.SetString("UserName", user.UserName);
-                HttpContext.Session.SetString("UserRole", user.Role);
+                var response = new
+                {
+                    Token = token,
+                    Role = user.Role,
+                    ExpiresIn = DateTime.Now.AddMinutes(30)
+                };
 
-                return Ok(new { token });
+                // Store the token and user data in the session
+                //HttpContext.Session.SetString("AuthToken", token);
+                //HttpContext.Session.SetString("Id", user.Id.ToString());  // Storing UserId instead of UserName
+                //HttpContext.Session.SetString("UserName", user.UserName);
+                //HttpContext.Session.SetString("UserRole", user.Role);
+
+                return Ok(new { response });
             }
             catch (Exception ex)
             {
