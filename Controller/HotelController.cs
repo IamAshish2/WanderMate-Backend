@@ -1,35 +1,33 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using secondProject.context;
 using secondProject.Dtos;
 using secondProject.Dtos.HotelDTOs;
+using secondProject.Interfaces;
 using secondProject.Models;
 
 namespace secondProject.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class HotelController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        public HotelController(ApplicationDbContext context)
+        private readonly IHotelRepository _hotelRepository;
+
+        public HotelController(IHotelRepository hotelRepository)
         {
-            _context = context;
+            _hotelRepository = hotelRepository;
         }
 
-        //Get request to hotels 
-        
+        // GET request to hotels 
         [HttpGet]
-        [Authorize(Roles = "Admin,User")]
-        public async Task<ActionResult<IEnumerable<Hotel>>> Get() // ienumerable
+        //[Authorize(Roles = "Admin,User")]
+        public async Task<ActionResult<IEnumerable<GetHotelDTO>>> Get()
         {
             try
             {
-                var hotel = await _context.Hotels.ToListAsync();
-                var hotelDtos = hotel.Select(hotel => new GetHotelDTO
+                var hotels = await _hotelRepository.GetHotelsAsync();
+                var hotelDtos = hotels.Select(hotel => new GetHotelDTO
                 {
                     Id = hotel.Id,
                     Name = hotel.Name,
@@ -38,23 +36,25 @@ namespace secondProject.Controller
                     ImageUrl = hotel.ImageUrl,
                     FreeCancellation = hotel.FreeCancellation,
                     ReserveNow = hotel.ReserveNow,
-                });
+                }).ToList();
 
                 return Ok(hotelDtos);
             }
             catch (Exception e)
             {
-                return StatusCode(404, $"404 error occured. No Hotels found: {e.Message}");
+                return StatusCode(500, $"Internal server error: {e.Message}");
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<Hotel>>> Create([FromBody] HotelDto hotelDto)
+        public async Task<ActionResult> Create([FromBody] HotelDto hotelDto)
         {
             try
             {
+                var existingHotel = await _hotelRepository.SearchByNameAsync(hotelDto.Name);
+                if (existingHotel != null) return BadRequest("The hotel already exists!");
 
-                var Hotel = new Hotel
+                var hotel = new Hotel
                 {
                     Name = hotelDto.Name,
                     Description = hotelDto.Description,
@@ -64,8 +64,8 @@ namespace secondProject.Controller
                     ReserveNow = hotelDto.ReserveNow
                 };
 
-                _context.Hotels.Add(Hotel);
-                await _context.SaveChangesAsync();
+                var result = await _hotelRepository.CreateHotelAsync(hotel);
+                if (!result) return BadRequest("The hotel could not be created. Try again later!");
                 return Ok("Hotel Created Successfully");
             }
             catch (Exception e)
@@ -74,32 +74,15 @@ namespace secondProject.Controller
             }
         }
 
-        // [HttpPost]
-        // public async Task<ActionResult<IEnumerable<Hotel>>> Create([FromBody] Hotel hotel)
-        // {
-        //     try
-        //     {
-        //         if (hotel == null)
-        //         {
-        //             return BadRequest("Hotel data is null");
-        //         }
-        //         await _context.Hotels.AddAsync(hotel);
-        //         await _context.SaveChangesAsync();
-        //         return Ok(hotel);
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         return BadRequest(e.Message);
-        //     }
-        // }
-
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetById(int id)
+        public async Task<ActionResult<HotelDto>> GetById(int id)
         {
             try
             {
-                var hotel = await _context.Hotels.FindAsync(id);
-                var hotelFromDto = new HotelDto
+                var hotel = await _hotelRepository.GetHotelByIdAsync(id);
+                if (hotel == null) return NotFound();
+
+                var hotelDto = new HotelDto
                 {
                     Name = hotel.Name,
                     Description = hotel.Description,
@@ -109,11 +92,7 @@ namespace secondProject.Controller
                     ReserveNow = hotel.ReserveNow
                 };
 
-                if (hotel == null)
-                {
-                    return NotFound();
-                }
-                return Ok(hotelFromDto);
+                return Ok(hotelDto);
             }
             catch (Exception e)
             {
@@ -122,46 +101,41 @@ namespace secondProject.Controller
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<IEnumerable<Hotel>>> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                var hotel = await _context.Hotels.FindAsync(id);
-                if (hotel == null)
-                {
-                    return NotFound();
-                }
-                _context.Hotels.Remove(hotel);
-                await _context.SaveChangesAsync();
+                var hotelExists = await _hotelRepository.HotelExistsAsync(id);
+                if (!hotelExists) return NotFound();
+
+                var result = await _hotelRepository.DeleteHotelAsync(id);
+                if (!result) return BadRequest("Could not delete hotel!");
                 return Ok("Deleted successfully");
             }
             catch (Exception e)
             {
-                return BadRequest($"Invalid argument: {e.Message}");
+                return StatusCode(500, $"Internal server error: {e.Message}");
             }
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<IEnumerable<Hotel>>> UpdateHotel(int id, HotelDto updateHotel)
+        public async Task<ActionResult> UpdateHotel(int id, [FromBody] HotelDto updateHotel)
         {
             try
             {
-                var findHotel = await _context.Hotels.FindAsync(id);
-                if (findHotel == null)
-                {
-                    return NotFound();
-                }
-                findHotel.Name = updateHotel.Name;
-                findHotel.Description = updateHotel.Description;
-                findHotel.ImageUrl = updateHotel.ImageUrl;
-                findHotel.Price = updateHotel.Price;
-                findHotel.FreeCancellation = updateHotel.FreeCancellation;
-                findHotel.ReserveNow = updateHotel.ReserveNow;
+                var existingHotel = await _hotelRepository.GetHotelByIdAsync(id);
+                if (existingHotel == null) return NotFound();
 
+                existingHotel.Name = updateHotel.Name;
+                existingHotel.Description = updateHotel.Description;
+                existingHotel.ImageUrl = updateHotel.ImageUrl;
+                existingHotel.Price = updateHotel.Price;
+                existingHotel.FreeCancellation = updateHotel.FreeCancellation;
+                existingHotel.ReserveNow = updateHotel.ReserveNow;
 
-                await _context.SaveChangesAsync();
+                var result = await _hotelRepository.UpdateHotelAsync(existingHotel);
+                if (!result) return StatusCode(500, "Unsuccessful operation. Try again!");
                 return Ok("Hotel successfully updated.");
-
             }
             catch (Exception e)
             {
@@ -170,26 +144,30 @@ namespace secondProject.Controller
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<Hotel>>> SearchByName([FromQuery] string name)
+        public async Task<ActionResult<HotelDto>> SearchByName([FromQuery] string name)
         {
             try
             {
-                var hotels = await _context.Hotels
-               .Where(h => h.Name.Contains(name))
-                .ToListAsync();
+                var hotel = await _hotelRepository.SearchByNameAsync(name);
+                if (hotel == null) return NotFound();
 
-                if (!hotels.Any())
+                var hotelDto = new GetHotelDTO
                 {
-                    return NotFound();
-                }
+                    Id = hotel.Id,
+                    Name = hotel.Name,
+                    Price = hotel.Price,
+                    Description = hotel.Description,
+                    ImageUrl = hotel.ImageUrl,
+                    FreeCancellation = hotel.FreeCancellation,
+                    ReserveNow = hotel.ReserveNow,
+                };
 
-                return Ok(hotels);
+                return Ok(hotelDto);
             }
             catch (Exception e)
             {
                 return StatusCode(500, $"Internal server error: {e.Message}");
             }
         }
-
     }
 }

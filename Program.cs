@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using secondProject.context;
+using secondProject.Interfaces;
 using secondProject.Models;
+using secondProject.Repository;
 using secondProject.Service;
 using System.Text;
 
@@ -19,6 +21,11 @@ var builder = WebApplication.CreateBuilder(args);
 //    });
 
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IThingsToDoRepository, ThingsToDoRepository>();
+builder.Services.AddScoped<IDestinationRepository,DestinationRepository>();
+builder.Services.AddScoped<IBookingRepository,BookingRepository>();
+builder.Services.AddScoped<IHotelRepository,HotelRepository>();
 // Add services to the container
 builder.Services.AddDistributedMemoryCache();
 
@@ -102,20 +109,19 @@ builder.Services.AddSwaggerGen(opt =>
 
 var app = builder.Build();
 
-app.UseSession();
+app.UseCors("AllowAllOrigins"); // Ensure CORS is configured first
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication(); // Ensure authentication is configured
+app.UseAuthorization();  // Ensure authorization is configured
 
 app.MapControllers();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseCors("AllowAllOrigins"); // enable the cors policy
-
-app.UseHttpsRedirection();
-
 
 app.Run();

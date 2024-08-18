@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using secondProject.Models;
 using secondProject.Interfaces;
 using AutoMapper;
 using secondProject.Dtos.DestinationDtos;
-
 
 namespace secondProject.Controller
 {
@@ -28,78 +22,85 @@ namespace secondProject.Controller
 
         // GET: Destinations
         [HttpGet]
-
-        public IActionResult GetDestinations()
+        public async Task<IActionResult> GetDestinationsAsync()
         {
-
-            var destinations = _destinationRepository.GetDestinations();
+            var destinations = await _destinationRepository.GetDestinationsAsync();
             if (destinations == null) return NotFound();
             return Ok(destinations);
         }
 
         // GET: Destinations/Details/5
-        [HttpGet("Destinations/{id}")]
-        public IActionResult GetDestinationById(int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetDestinationByIdAsync(int id)
         {
-            if (!_destinationRepository.DestinationsExists(id) || id == null) return NotFound();
-            var destination = _destinationRepository.GetDestinationById(id);
-            if (destination == null) return NotFound(); 
-            if(!ModelState.IsValid) return BadRequest();
+            if (id == 0 || !await _destinationRepository.DestinationsExistsAsync(id)) return NotFound();
+            var destination = await _destinationRepository.GetDestinationByIdAsync(id);
+            if (destination == null) return NotFound();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             return Ok(destination);
         }
 
-        // GET: Destinations/Create
+        // POST: Destinations/Create
         [HttpPost]
-        public IActionResult CreateDestination([FromBody] DestinationDto destinationDto)
+        public async Task<IActionResult> CreateDestinationAsync([FromBody] DestinationDto destinationDto)
         {
-            var destinations = _destinationRepository.GetDestinations().Where(d => d.Name == destinationDto.Name).FirstOrDefault();
-            if(destinations != null) return BadRequest("The destination already exists!");
+            var existingDestination = await _destinationRepository.SearchByNameAsync(destinationDto.Name);
+            if (existingDestination != null) return BadRequest("The destination already exists!");
 
             var destination = new Destination
             {
                 Name = destinationDto.Name,
                 Price = destinationDto.Price,
-                ImageUrls = destinationDto.ImageUrls,
+                ImageUrl = destinationDto.ImageUrl,
                 Description = destinationDto.Description,
             };
 
-            if(!_destinationRepository.CreateDestination(destination)) return BadRequest("The destination could not be created.Try again later!");
+            if (!await _destinationRepository.CreateDestinationAsync(destination))
+                return BadRequest("The destination could not be created. Try again later!");
+
             return Ok(destination);
         }
 
-
+        // DELETE: Destinations/Delete/5
         [HttpDelete("{destId}")]
-        public IActionResult DeleteDestination(int destId)
+        public async Task<IActionResult> DeleteDestinationAsync(int destId)
         {
-            if (!_destinationRepository.DestinationsExists(destId) || destId == null) return NotFound();
+            if (destId == 0 || !await _destinationRepository.DestinationsExistsAsync(destId)) return NotFound();
 
-            var destination = _destinationRepository.GetDestinationById(destId);
+            var destination = await _destinationRepository.GetDestinationByIdAsync(destId);
+            if (destination == null) return NotFound();
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            if (!_destinationRepository.DeleteDestination(destination)) return BadRequest("Could not delete Destination!");
-            return Ok("Deletion Successfull");
+
+            if (!await _destinationRepository.DeleteDestinationAsync(destination))
+                return BadRequest("Could not delete the destination!");
+
+            return Ok("Deletion successful");
         }
 
+        // PUT: Destinations/Update/5
         [HttpPut("{destId}")]
-        public IActionResult UpdateThingsToDo(int destId, [FromBody] DestinationDto destination)
+        public async Task<IActionResult> UpdateDestinationAsync(int destId, [FromBody] DestinationDto destinationDto)
         {
-            if (!_destinationRepository.DestinationsExists(destId)) return BadRequest("Things to do does not exist!");
-            if (destination == null) return BadRequest(ModelState);
+            if (destId == 0 || !await _destinationRepository.DestinationsExistsAsync(destId))
+                return BadRequest("Destination does not exist!");
 
-            var existingDestination = _destinationRepository.GetDestinationById(destId);
+            if (destinationDto == null) return BadRequest(ModelState);
 
-            existingDestination.Name = destination.Name;
-            existingDestination.Price = destination.Price;
-            existingDestination.ImageUrls = destination.ImageUrls;
-            existingDestination.Description = destination.Description;
+            var existingDestination = await _destinationRepository.GetDestinationByIdAsync(destId);
+            if (existingDestination == null) return NotFound();
 
-            if (!_destinationRepository.UpdateDestination(existingDestination))
+            existingDestination.Name = destinationDto.Name;
+            existingDestination.Price = destinationDto.Price;
+            existingDestination.ImageUrl = destinationDto.ImageUrl;
+            existingDestination.Description = destinationDto.Description;
+
+            if (!await _destinationRepository.UpdateDestinationAsync(existingDestination))
             {
-                ModelState.AddModelError("", "Unsuccessfull operation. Try again!");
+                ModelState.AddModelError("", "Unsuccessful operation. Try again!");
                 return StatusCode(500, ModelState);
             }
-            return Ok("Succes");
+
+            return Ok("Success");
         }
-
-
     }
 }
