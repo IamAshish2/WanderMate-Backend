@@ -1,6 +1,10 @@
-﻿using secondProject.context;
+﻿using Microsoft.EntityFrameworkCore;
+using secondProject.context;
 using secondProject.Interfaces;
 using secondProject.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace secondProject.Repository
 {
@@ -12,55 +16,60 @@ namespace secondProject.Repository
         {
             _context = context;
         }
-        public bool CreateDestination(Destination destination)
-        {
-            _context.Add(destination);
-            return Save();
 
+        public async Task<bool> CreateDestinationAsync(Destination destination)
+        {
+            await _context.AddAsync(destination);
+            return await SaveAsync();
         }
 
-        public bool DeleteDestination(int destId)
+        public async Task<bool> DeleteDestinationAsync(int destId)
         {
-            _context.Remove(destId);
-            return Save();
+            var destination = await _context.Destinations.FindAsync(destId);
+            if (destination != null)
+            {
+                _context.Remove(destination);
+                return await SaveAsync();
+            }
+            return false;
         }
 
-        public bool DeleteDestination(Destination destination)
+        public async Task<bool> DeleteDestinationAsync(Destination destination)
         {
             _context.Remove(destination);
-            return Save();
+            return await SaveAsync();
         }
 
-        public bool DestinationsExists(int destId)
+        public async Task<bool> DestinationsExistsAsync(int destId)
         {
-            return _context.Destinations.Any(d => d.Id == destId);
+            return await _context.Destinations.AnyAsync(d => d.Id == destId);
         }
 
-        public Destination GetDestinationById(int destId)
+        public async Task<Destination> GetDestinationByIdAsync(int destId)
         {
-            return _context.Destinations.Where(d => d.Id == destId).FirstOrDefault();
+            return await _context.Destinations.FirstOrDefaultAsync(d => d.Id == destId);
         }
 
-        public ICollection<Destination> GetDestinations()
+        public async Task<ICollection<Destination>> GetDestinationsAsync()
         {
-            return _context.Destinations.OrderBy(d => d.Id).ToList();
+            return await _context.Destinations.OrderBy(d => d.Id).ToListAsync();
         }
 
-        public bool Save()
+        public async Task<bool> SaveAsync()
         {
-           var saved =  _context.SaveChanges();
-            return saved > 0 ? true : false;
+            var saved = await _context.SaveChangesAsync();
+            return saved > 0;
         }
 
-        public Destination searchByName(string name)
+        public async Task<Destination> SearchByNameAsync(string name)
         {
-            return _context.Destinations.FirstOrDefault(d => d.Name == name);
+            return await _context.Destinations.FirstOrDefaultAsync(d => d.Name == name);
         }
 
-        public bool UpdateDestination(Destination destination)
+        public async Task<bool> UpdateDestinationAsync(Destination destination)
         {
             _context.Update(destination);
-            return Save();
+            return await SaveAsync();
         }
     }
 }

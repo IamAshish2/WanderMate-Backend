@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using secondProject.context;
+using secondProject.Interfaces;
 using secondProject.Models;
 
 namespace secondProject.Controller
@@ -13,25 +10,26 @@ namespace secondProject.Controller
     [Route("api/[controller]")]
     public class BookingController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IBookingRepository _bookingRepository;
 
-        public BookingController(ApplicationDbContext context)
+        public BookingController(IBookingRepository bookingRepository)
         {
-            _context = context;
+            _bookingRepository = bookingRepository;
         }
 
-
+        // Get all bookings
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Booking>>> GetBookings()
+        public async Task<IActionResult> GetBookings()
         {
-            var bookings = await _context.Bookings.ToListAsync();
+            var bookings = await _bookingRepository.GetBookingsAsync();
             return Ok(bookings);
         }
 
+        // Get booking by ID
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Booking>>> GetBookingById(int id)
+        public async Task<IActionResult> GetBookingById(int id)
         {
-            var booking = await _context.Bookings.FirstOrDefaultAsync(b => b.BookingId == id);
+            var booking = await _bookingRepository.GetBookingByIdAsync(id);
 
             if (booking == null)
             {
@@ -41,22 +39,24 @@ namespace secondProject.Controller
             return Ok(booking);
         }
 
+        // Delete booking by ID
         [HttpDelete("{id}")]
-        public async Task<ActionResult<IEnumerable<Booking>>> DeleteBooking(int id)
+        public async Task<IActionResult> DeleteBooking(int id)
         {
-            var booking = await _context.Bookings.FindAsync(id);
+            if (!await _bookingRepository.BookingExistsAsync(id)) return NotFound();
+            var booking = await _bookingRepository.GetBookingByIdAsync(id);
             if (booking == null)
             {
                 return NotFound();
             }
 
-            _context.Bookings.Remove(booking);
-            _context.SaveChanges();
-            return NoContent();
-        }
+            bool isDeleted = await _bookingRepository.DeleteBookingAsync(booking);
+            if (!isDeleted)
+            {
+                return StatusCode(500, "Error deleting the booking");
+            }
 
-        private bool BookingExists(int bookingId){
-            return _context.Bookings.Any(b => b.BookingId == bookingId);
+            return NoContent();
         }
     }
 }
