@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using secondProject.context;
-using secondProject.Dtos;
+using secondProject.Dtos.PasswordDTOs;
 using secondProject.Dtos.UserDTOs;
 using secondProject.Models;
 using secondProject.Service;
@@ -16,7 +16,7 @@ namespace secondProject.Controller
         private readonly EmailService _emailService;
         private readonly PasswordReset _passwordReset;
 
-        public UserController(ApplicationDbContext context,EmailService emailService)
+        public UserController(ApplicationDbContext context, EmailService emailService)
         {
             _context = context;
             _emailService = emailService;
@@ -24,18 +24,24 @@ namespace secondProject.Controller
 
         [HttpGet]
         //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<GetUserDto>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDataDto>>> GetUsers()
         {
             try
             {
                 var users = await _context.Users.ToListAsync();
                 var userDto = users.Select(u => new GetUserDto
                 {
-                    Id = u.Id,  
+                    Id = u.Id,
                     UserName = u.UserName,
                     Role = u.Role,
-                    Email = u.Email,    
-                    Password = u.Password
+                    Email = u.Email,
+                    Password = u.Password,
+                    //ProfileImageUrl = u.ProfileImageUrl,
+                    //CoverImageUrl = u.CoverImageUrl,
+                    Occupation = u.Occupation,
+                    Bio = u.Bio,
+                    Location = u.Location,
+
                 });
                 return Ok(userDto);
             }
@@ -55,13 +61,51 @@ namespace secondProject.Controller
                 return NotFound();
             }
 
+            var userDto = new UserDto
+            {
+                UserName = user.UserName,
+                Role = user.Role,
+                Email = user.Email,
+                Password = user.Password
+            };
+            //var userDto =new UserDataDto
+            //{
+            //    Id = u.Id,
+            //    UserName = u.UserName,
+            //    Role = u.Role,
+            //    Email = u.Email,
+            //    Password = u.Password,
+            //    ProfileImageUrl = u.ProfileImageUrl,
+            //    CoverImageUrl = u.CoverImageUrl,
+            //    Occupation = u.Occupation,
+            //    Bio = u.Bio,
+            //    Location = u.Location,
+
+            //};
+
+            return Ok(userDto);
+        }
+
+        [HttpGet("UserEmail/{email}")]
+        public async Task<ActionResult<User>> GetUserByEmail(string email)
+        {
+            var user = await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
             var userDto = new GetUserDto
             {
                 Id = user.Id,
                 UserName = user.UserName,
-                Role = user.Role,   
+                Role = user.Role,
                 Email = user.Email,
-                Password = user.Password
+                Password   = user.Password,
+                Occupation = user.Occupation,
+                Bio = user.Bio,
+                Location = user.Location,  
             };
 
             return Ok(userDto);
@@ -120,16 +164,16 @@ namespace secondProject.Controller
         }
 
         [HttpPost("Forgot Password")]
-        public async Task<ActionResult> ForgotPassword([FromBody] ForgotPasswordDto model)    
+        public async Task<ActionResult> ForgotPassword([FromBody] ForgotPasswordDto model)
         {
             var user = _context.Users.FirstOrDefault(u => u.Email == model.Email);
-            if (user == null)  return NotFound();
+            if (user == null) return NotFound();
 
             // Simulate generating a password reset token (In reality, you'd generate a secure, unique token)
             var resetToken = Guid.NewGuid().ToString();   // Generate a secure token
 
             var emailBody = $"This is your Reset Token: {resetToken}";
-             await _emailService.SendEmailAsync(user.Email, "Password Reset", emailBody);
+            await _emailService.SendEmailAsync(user.Email, "Password Reset", emailBody);
 
 
             // // Store the reset token with the user's information in a secure way (e.g., in a database)
@@ -151,7 +195,7 @@ namespace secondProject.Controller
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
             var findUser = await _context.Users.Where(u => u.Email == model.Email).FirstOrDefaultAsync();
-            if(findUser == null) return BadRequest("The email was not found!");
+            if (findUser == null) return BadRequest("The email was not found!");
 
             // Update the user's password
             findUser.Password = hashedPassword;
@@ -164,6 +208,64 @@ namespace secondProject.Controller
 
             return Ok("Password updated successfully.");
 
+        }
+
+        //[HttpPut("{userId}")]
+        //public async Task<ActionResult> UpdateProfile(int userId, [FromBody] UserDataDto userDto)
+        //{
+        //    if (userId == null) return BadRequest(ModelState);
+        //    if (userId != userDto.Id) return BadRequest("The userId didn't match.");
+        //    var user = await _context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
+        //    if (user is null) return BadRequest("The user was not found!");
+
+        //    user.Id = userDto.Id;
+        //    user.UserName = userDto.UserName;
+        //    user.Email = userDto.Email;
+        //    //user.ProfileImageUrl = userDto.ProfileImageUrl;
+        //    //user.CoverImageUrl = userDto.CoverImageUrl;
+        //    user.Bio  = userDto.Bio;
+        //    user.Occupation = userDto.Occupation;
+        //    user.Location = userDto.Location;
+
+        //     _context.Users.Update(user);
+        //    await _context.SaveChangesAsync();
+
+        //    return Ok(user);
+        //}
+
+        [HttpPut("{userId}")]
+        public async Task<ActionResult> UpdateProfile(int userId, [FromBody] UserDataDto userDto)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user is null) return BadRequest("The user was not found!");
+
+            try
+            {
+                // Additional data validation if needed
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                // Update user properties
+                user.UserName = userDto.UserName;
+                //user.Email = userDto.Email;
+                user.Bio = userDto.Bio;
+                user.Location = userDto.Location;
+                user.Occupation = userDto.Occupation;   
+                // ... other properties
+
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging
+                Console.Error.WriteLine($"Error updating user: {ex.Message}");
+                return StatusCode(500, "An error occurred while updating the user.");
+            }
         }
     }
 }
